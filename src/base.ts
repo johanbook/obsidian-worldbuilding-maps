@@ -77,8 +77,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const svgEl = this.createSvgFromImage(imageUrl, width, height);
 
 		for (const item of this.data.data) {
-			// @ts-expect-error // TODO: Look into this. Works for now
-			const coords = item.getValue("coordinates");
+			const coords = item.getValue("note.coordinates");
 
 			if (!coords) {
 				continue;
