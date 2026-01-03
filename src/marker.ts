@@ -1,38 +1,68 @@
-import { BasesEntry } from "obsidian";
+import { App, BasesEntry, setIcon } from "obsidian";
 
-const fillColor = "red";
-const size = "8";
-const strokeWidth = "2";
+function getIconName(type: string): string {
+	switch (type) {
+		case "City":
+			return "lucide-castle";
+		case "Country":
+			return "lucide-shield";
+		case "Forest":
+			return "lucide-trees";
+		case "Fortress":
+			return "lucide-chess-rook";
+		default:
+			return "lucide-shield";
+	}
+}
+
+function getColor(item: BasesEntry): string {
+	const colorFromFormula = item.getValue("formula.color")?.toString();
+
+	if (colorFromFormula && colorFromFormula !== "null") {
+		return colorFromFormula;
+	}
+
+	const colorFromNote = item.getValue("note.color")?.toString();
+
+	if (colorFromNote && colorFromNote !== "null") {
+		return colorFromNote;
+	}
+
+	return "";
+}
 
 export function renderMarker(
 	x: number,
 	y: number,
 	svgEl: SVGSVGElement,
 	item: BasesEntry,
+	app: App,
 ): void {
-	svgEl.createSvg("circle", {
+	const type = item.getValue("note.type")!.toString();
+
+	const marker = svgEl.createSvg("g", {
 		attr: {
-			cx: String(x),
-			cy: String(y),
-			r: size,
-			fill: fillColor,
-			stroke: "black",
-			"stroke-width": strokeWidth,
+			transform: `translate(${x} ${y})`,
 		},
 		cls: "wb-marker",
 	});
 
-	const title = item.getValue("file.name");
+	const iconName = getIconName(type);
 
-	if (title) {
-		const titleEl = svgEl.createSvg("text", {
-			attr: {
-				x: String(x),
-				y: String(y) + 30,
-				fill: "black",
-			},
-			cls: "wb-marker-text",
-		});
-		titleEl.textContent = title.toString();
+	// @ts-expect-error // TODO: Fix type error
+	setIcon(marker, iconName);
+
+	const svg = marker.querySelector("svg");
+
+	if (!svg) {
+		return;
+	}
+
+	svg.setAttr("stroke", "black");
+
+	const color = getColor(item);
+
+	if (color) {
+		svg.setAttr("fill", color);
 	}
 }

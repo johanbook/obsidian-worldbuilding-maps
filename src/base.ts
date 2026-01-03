@@ -87,7 +87,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				if (coords instanceof ListValue) {
 					const x = Number(coords.get(0)) * width;
 					const y = Number(coords.get(1)) * height;
-					renderMarker(x, y, svgEl, item);
+					renderMarker(x, y, svgEl, item, this.app);
 				}
 			} catch (error) {
 				console.error("Failed to parse coordinates", error);
