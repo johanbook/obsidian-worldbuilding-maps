@@ -1,5 +1,7 @@
 import { BasesView, ListValue, QueryController } from "obsidian";
 
+import { renderMarker } from "./marker";
+
 export const VIEW_TYPE = "worldbuilding-map-view";
 
 export class WorldBuildingMapsBasesView extends BasesView {
@@ -11,7 +13,9 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		this.containerEl = parentEl.createDiv(`${VIEW_TYPE}-container`);
 	}
 
-	private getImage(path: string) {
+	private getImageUrl() {
+		const path = String(this.config.get("imageUrl"));
+
 		const file = this.app.vault.getFileByPath(path);
 
 		if (!file) {
@@ -50,71 +54,45 @@ export class WorldBuildingMapsBasesView extends BasesView {
 	public onDataUpdated(): void {
 		this.containerEl.empty();
 
-		const imageUrl = String(this.config.get("imageUrl"));
+		const imageUrl = this.getImageUrl();
 
 		if (!imageUrl) {
-			this.containerEl.createDiv({ text: `Missing image url` });
-			return;
-		}
-
-		const resolvedImageUrl = this.getImage(imageUrl);
-
-		if (!resolvedImageUrl) {
 			this.containerEl.createDiv({
 				text: `Cannot find image at url '${imageUrl}'`,
 			});
 			return;
 		}
 
+		// Get image dimensions and render map
 		const image = new Image();
-		image.onload = () => {
-			const width = image.naturalWidth;
-			const height = image.naturalHeight;
+		image.onload = () =>
+			this.renderMap(imageUrl, image.naturalWidth, image.naturalHeight);
+		image.onerror = (error) =>
+			console.error("Failed to resolve map dimensions", error);
 
-			const svgEl = this.createSvgFromImage(
-				resolvedImageUrl,
-				width,
-				height,
-			);
-
-			for (const item of this.data.data) {
-				// @ts-expect-error // TODO: Look into this. Works for now
-				const coords = item.getValue("coordinates");
-
-				if (!coords) {
-					continue;
-				}
-
-				try {
-					if (coords instanceof ListValue) {
-						const x = Number(coords.get(0)) * width;
-						const y = Number(coords.get(1)) * height;
-						this.renderMarker(x, y, item, svgEl);
-					}
-				} catch (error) {
-					console.error("Failed to parse coordinates", error);
-				}
-			}
-		};
-		image.src = resolvedImageUrl;
+		image.src = imageUrl;
 	}
 
-	private renderMarker(
-		x: number,
-		y: number,
-		item: any,
-		svgEl: SVGSVGElement,
-	): void {
-		const circle = svgEl.createSvg("circle", {
-			attr: {
-				cx: String(x),
-				cy: String(y),
-				r: "8",
-				fill: "red",
-			},
-		});
+	private renderMap(imageUrl: string, width: number, height: number) {
+		const svgEl = this.createSvgFromImage(imageUrl, width, height);
 
-		const title = circle.createSvg("title");
-		title.textContent = item.getValue("file.name") ?? "Unknown";
+		for (const item of this.data.data) {
+			// @ts-expect-error // TODO: Look into this. Works for now
+			const coords = item.getValue("coordinates");
+
+			if (!coords) {
+				continue;
+			}
+
+			try {
+				if (coords instanceof ListValue) {
+					const x = Number(coords.get(0)) * width;
+					const y = Number(coords.get(1)) * height;
+					renderMarker(x, y, svgEl, item);
+				}
+			} catch (error) {
+				console.error("Failed to parse coordinates", error);
+			}
+		}
 	}
 }
