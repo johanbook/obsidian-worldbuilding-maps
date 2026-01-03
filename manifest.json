@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-johanbook-map",
+	"id": "obsidian-worldbuilding-maps",
 	"name": "Worldbuilding Maps",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Add maps for world building.",
+	"description": "Adds a bases view layer for world building maps.",
 	"author": "Johan Book",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"authorUrl": "https://johanbook.com",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }
