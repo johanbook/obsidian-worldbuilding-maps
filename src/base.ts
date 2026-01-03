@@ -21,10 +21,14 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		return this.app.vault.getResourcePath(file);
 	}
 
-	private createSvgFromImage(imageUrl: string) {
+	private createSvgFromImage(
+		imageUrl: string,
+		width: number,
+		height: number,
+	) {
 		const svgEl = this.containerEl.createSvg("svg", {
 			attr: {
-				viewBox: "0 0 1000 1000",
+				viewBox: `0 0 ${width} ${height}`,
 				preserveAspectRatio: "xMidYMid meet",
 			},
 		});
@@ -35,8 +39,8 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				href: imageUrl,
 				x: "0",
 				y: "0",
-				width: "1000",
-				height: "1000",
+				width: String(width),
+				height: String(height),
 			},
 		});
 
@@ -62,26 +66,37 @@ export class WorldBuildingMapsBasesView extends BasesView {
 			return;
 		}
 
-		const svgEl = this.createSvgFromImage(resolvedImageUrl);
+		const image = new Image();
+		image.onload = () => {
+			const width = image.naturalWidth;
+			const height = image.naturalHeight;
 
-		for (const item of this.data.data) {
-			// @ts-expect-error // TODO: Look into this. Works for now
-			const coords = item.getValue("coordinates");
+			const svgEl = this.createSvgFromImage(
+				resolvedImageUrl,
+				width,
+				height,
+			);
 
-			if (!coords) {
-				continue;
-			}
+			for (const item of this.data.data) {
+				// @ts-expect-error // TODO: Look into this. Works for now
+				const coords = item.getValue("coordinates");
 
-			try {
-				if (coords instanceof ListValue) {
-					const x = Number(coords.get(0));
-					const y = Number(coords.get(1));
-					this.renderMarker(x, y, item, svgEl);
+				if (!coords) {
+					continue;
 				}
-			} catch (error) {
-				console.error("Failed to parse coordinates", error);
+
+				try {
+					if (coords instanceof ListValue) {
+						const x = Number(coords.get(0)) * width;
+						const y = Number(coords.get(1)) * height;
+						this.renderMarker(x, y, item, svgEl);
+					}
+				} catch (error) {
+					console.error("Failed to parse coordinates", error);
+				}
 			}
-		}
+		};
+		image.src = resolvedImageUrl;
 	}
 
 	private renderMarker(
