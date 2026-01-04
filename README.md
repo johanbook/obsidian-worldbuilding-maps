@@ -10,9 +10,11 @@ the vault instead.
 Coordinates are stored in the frontmatter of the files like below
 
 ```yaml
+type: City
 coordinates:
     - "0.8"
     - "0.2"
-icon: "landmark"
-color: "red"
+color: red
 ```
+
+Color and type of icon is inferred from the `type` and `country` props.
