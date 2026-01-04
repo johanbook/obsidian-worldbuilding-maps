@@ -1,6 +1,7 @@
-import { BasesView, ListValue, QueryController } from "obsidian";
+import { BasesView, QueryController } from "obsidian";
 
 import { renderMarker } from "./marker";
+import { getCoordinates } from "utils";
 
 export const VIEW_TYPE = "worldbuilding-map-view";
 
@@ -77,21 +78,14 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const svgEl = this.createSvgFromImage(imageUrl, width, height);
 
 		for (const item of this.data.data) {
-			const coords = item.getValue("note.coordinates");
+			const coords = getCoordinates(item, width, height);
 
 			if (!coords) {
 				continue;
 			}
 
-			try {
-				if (coords instanceof ListValue) {
-					const x = Number(coords.get(0)) * width;
-					const y = Number(coords.get(1)) * height;
-					renderMarker(x, y, svgEl, item, this.app);
-				}
-			} catch (error) {
-				console.error("Failed to parse coordinates", error);
-			}
+			const [x, y] = coords;
+			renderMarker(x, y, svgEl, item);
 		}
 	}
 }

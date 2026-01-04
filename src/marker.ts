@@ -1,4 +1,4 @@
-import { App, BasesEntry, setIcon } from "obsidian";
+import { BasesEntry, setIcon } from "obsidian";
 
 import { getProperty } from "./utils";
 
@@ -22,7 +22,6 @@ export function renderMarker(
 	y: number,
 	svgEl: SVGSVGElement,
 	item: BasesEntry,
-	app: App,
 ): void {
 	const type = getProperty(item, "type");
 	const color = getProperty(item, "color");
@@ -32,6 +31,22 @@ export function renderMarker(
 			transform: `translate(${x} ${y})`,
 		},
 		cls: "wb-marker",
+	});
+
+	marker.addEventListener("mouseleave", (event) => {
+		const svg = marker.querySelector("svg");
+
+		if (svg) {
+			svg.setAttr("stroke", "black");
+		}
+	});
+
+	marker.addEventListener("mouseenter", (event) => {
+		const svg = marker.querySelector("svg");
+
+		if (svg) {
+			svg.setAttr("stroke", "white");
+		}
 	});
 
 	const iconName = getIconName(type);
