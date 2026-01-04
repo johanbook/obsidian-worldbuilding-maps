@@ -1,5 +1,7 @@
 import { App, BasesEntry, setIcon } from "obsidian";
 
+import { getProperty } from "./utils";
+
 function getIconName(type: string): string {
 	switch (type) {
 		case "City":
@@ -15,22 +17,6 @@ function getIconName(type: string): string {
 	}
 }
 
-function getColor(item: BasesEntry): string {
-	const colorFromFormula = item.getValue("formula.color")?.toString();
-
-	if (colorFromFormula && colorFromFormula !== "null") {
-		return colorFromFormula;
-	}
-
-	const colorFromNote = item.getValue("note.color")?.toString();
-
-	if (colorFromNote && colorFromNote !== "null") {
-		return colorFromNote;
-	}
-
-	return "";
-}
-
 export function renderMarker(
 	x: number,
 	y: number,
@@ -38,7 +24,8 @@ export function renderMarker(
 	item: BasesEntry,
 	app: App,
 ): void {
-	const type = item.getValue("note.type")!.toString();
+	const type = getProperty(item, "type");
+	const color = getProperty(item, "color");
 
 	const marker = svgEl.createSvg("g", {
 		attr: {
@@ -59,8 +46,6 @@ export function renderMarker(
 	}
 
 	svg.setAttr("stroke", "black");
-
-	const color = getColor(item);
 
 	if (color) {
 		svg.setAttr("fill", color);
