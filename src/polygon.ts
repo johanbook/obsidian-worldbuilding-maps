@@ -9,7 +9,7 @@ type Coordinates = { x: number; y: number }[];
 
 export function renderPolygon(
 	points: Coordinates,
-	svgEl: SVGSVGElement,
+	svgEl: SVGElement,
 	item: BasesEntry,
 ): void {
 	const color = getProperty(item, "color");
