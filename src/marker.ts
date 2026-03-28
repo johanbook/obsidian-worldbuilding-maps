@@ -20,7 +20,7 @@ function getIconName(type: string): string {
 export function renderMarker(
 	x: number,
 	y: number,
-	svgEl: SVGSVGElement,
+	svgEl: SVGElement,
 	item: BasesEntry,
 ): void {
 	const type = getProperty(item, "type");
