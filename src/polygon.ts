@@ -14,11 +14,10 @@ export function renderPolygon(
 ): void {
 	const color = getProperty(item, "color");
 
-	const pointString = points.map(({ x, y }) => `${x},${y}`).join(" ");
-
 	const marker = svgEl.createSvg("polygon", {
 		attr: {
-			points: pointString,
+			// Expected format is `x1,y1 x2,y2`
+			points: points.map(({ x, y }) => `${x},${y}`).join(" "),
 		},
 		cls: "wb-marker",
 	});
