@@ -1,6 +1,5 @@
 import { select } from "d3-selection";
-import * as d3 from "d3-zoom";
-import { ZoomBehavior, D3ZoomEvent } from "d3-zoom";
+import { zoom, ZoomBehavior, D3ZoomEvent } from "d3-zoom";
 
 const MAX_ZOOM = 8;
 
@@ -21,8 +20,10 @@ export const setUpSvgZoomAndPan = ({
 	const svg = select(svgElement);
 	const container = select(contentGroup);
 
-	const zoom: ZoomBehavior<SVGSVGElement, unknown> = d3
-		.zoom<SVGSVGElement, unknown>()
+	const zoomBehavior: ZoomBehavior<SVGSVGElement, unknown> = zoom<
+		SVGSVGElement,
+		unknown
+	>()
 		.scaleExtent([1, MAX_ZOOM])
 		.translateExtent([
 			[0, 0],
@@ -37,5 +38,5 @@ export const setUpSvgZoomAndPan = ({
 			container.attr("transform", event.transform.toString());
 		});
 
-	svg.call(zoom);
+	svg.call(zoomBehavior);
 };
