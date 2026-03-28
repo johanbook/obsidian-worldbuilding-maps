@@ -13,7 +13,7 @@ function getIconName(type: string): string {
 		case "Fortress":
 			return "lucide-chess-rook";
 		default:
-			return "lucide-shield";
+			return "lucide-map-pin";
 	}
 }
 
