@@ -1,22 +1,43 @@
 import { BasesEntry, ListValue } from "obsidian";
 
-export function getCoordinates(
+interface Coordinate {
+	x: number;
+	y: number;
+}
+
+export function parseCoordinates(
 	item: BasesEntry,
 	width: number,
 	height: number,
-): [number, number] | undefined {
+): Coordinate[] | undefined {
 	const coords = item.getValue("note.coordinates");
 
 	if (!coords) {
 		return;
 	}
 
+	if (!(coords instanceof ListValue)) {
+		return;
+	}
+
+	if (coords.length() % 2 != 0) {
+		console.error(
+			`Number of coordinates must be even, got '${coords.length()}'`,
+		);
+		return;
+	}
+
 	try {
-		if (coords instanceof ListValue) {
-			const x = Number(coords.get(0)) * width;
-			const y = Number(coords.get(1)) * height;
-			return [x, y];
+		const result: Coordinate[] = [];
+
+		for (let index = 0; index < coords.length(); index += 2) {
+			const x = Number(coords.get(index)) * width;
+			const y = Number(coords.get(index + 1)) * height;
+
+			result.push({ x, y });
 		}
+
+		return result;
 	} catch (error) {
 		console.error("Failed to parse coordinates", error);
 	}

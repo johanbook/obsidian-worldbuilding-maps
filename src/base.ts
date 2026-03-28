@@ -1,7 +1,8 @@
 import { BasesView, QueryController } from "obsidian";
 
 import { renderMarker } from "./marker";
-import { getCoordinates } from "utils";
+import { parseCoordinates } from "utils";
+import { renderPolygon } from "polygon";
 
 export const VIEW_TYPE = "worldbuilding-map-view";
 
@@ -78,14 +79,20 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const svgEl = this.createSvgFromImage(imageUrl, width, height);
 
 		for (const item of this.data.data) {
-			const coords = getCoordinates(item, width, height);
+			const coords = parseCoordinates(item, width, height);
 
 			if (!coords) {
 				continue;
 			}
 
-			const [x, y] = coords;
-			renderMarker(x, y, svgEl, item);
+			if (coords.length > 2) {
+				renderPolygon(coords, svgEl, item);
+			} else if (coords.length === 1) {
+				const { x, y } = coords[0]!;
+				if (x && y) {
+					renderMarker(x, y, svgEl, item);
+				}
+			}
 		}
 	}
 }
