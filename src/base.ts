@@ -102,7 +102,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				// If just one coordinate then treat it as a marker
 			} else if (coords.length === 1) {
 				const { x, y } = coords[0]!;
-				renderMarker(x, y, svgEl, item);
+				renderMarker(x, y, svgEl, item, this.app);
 			}
 		}
 	}
