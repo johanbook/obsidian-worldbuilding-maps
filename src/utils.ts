@@ -5,6 +5,7 @@ interface Coordinate {
 	y: number;
 }
 
+/** Parses coordinates from an Obsidian entry */
 export function parseCoordinates(
 	item: BasesEntry,
 	width: number,
@@ -20,7 +21,7 @@ export function parseCoordinates(
 		return;
 	}
 
-	if (coords.length() % 2 != 0) {
+	if (coords.length() % 2 !== 0) {
 		console.error(
 			`Number of coordinates must be even, got '${coords.length()}'`,
 		);
@@ -30,6 +31,7 @@ export function parseCoordinates(
 	try {
 		const result: Coordinate[] = [];
 
+		// Parse coordinates in x and y pairs
 		for (let index = 0; index < coords.length(); index += 2) {
 			const x = Number(coords.get(index)) * width;
 			const y = Number(coords.get(index + 1)) * height;
@@ -44,8 +46,8 @@ export function parseCoordinates(
 	return;
 }
 
-// Get property from note by checking first available value in formula
-// and later one in frontmatter
+/** Get property from note by checking first available value
+ * in formula and later one in frontmatter */
 export function getProperty(item: BasesEntry, property: string): string {
 	const propertyFromFormula = item
 		.getValue(`formula.${property}`)

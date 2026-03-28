@@ -85,13 +85,14 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				continue;
 			}
 
-			if (coords.length > 2) {
+			// If more than one coordinate is specified we treat it as
+			// a ploygin
+			if (coords.length > 1) {
 				renderPolygon(coords, svgEl, item);
+				// If just one coordinate then treat it as a marker
 			} else if (coords.length === 1) {
 				const { x, y } = coords[0]!;
-				if (x && y) {
-					renderMarker(x, y, svgEl, item);
-				}
+				renderMarker(x, y, svgEl, item);
 			}
 		}
 	}

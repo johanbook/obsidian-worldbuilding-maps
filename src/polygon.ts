@@ -2,6 +2,9 @@ import { BasesEntry } from "obsidian";
 
 import { getProperty } from "./utils";
 
+const FILL_OPACITY = 0.1;
+const FILL_OPACITY_HIGHLIGHTED = 0.2;
+
 type Coordinates = { x: number; y: number }[];
 
 export function renderPolygon(
@@ -22,17 +25,18 @@ export function renderPolygon(
 
 	marker.addEventListener("mouseleave", (event) => {
 		marker.setAttr("stroke", "black");
-		marker.setAttr("fill-opacity", "0.1");
+		marker.setAttr("fill-opacity", FILL_OPACITY);
 	});
 
 	marker.addEventListener("mouseenter", (event) => {
 		marker.setAttr("stroke", "white");
-		marker.setAttr("fill-opacity", "0.2");
+		marker.setAttr("fill-opacity", FILL_OPACITY_HIGHLIGHTED);
 	});
 
+	marker.setAttr("stroke", "black");
+	marker.setAttr("fill-opacity", FILL_OPACITY);
+
 	if (color) {
-		marker.setAttr("stroke", "black");
 		marker.setAttr("fill", color);
-		marker.setAttr("fill-opacity", "0.1");
 	}
 }
