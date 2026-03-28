@@ -1,7 +1,7 @@
 import { select } from "d3-selection";
 import { zoom, ZoomBehavior, D3ZoomEvent } from "d3-zoom";
 
-const MAX_ZOOM = 8;
+const MAX_ZOOM = 6;
 
 interface SetUpSvgZoomAndPanProps {
 	contentGroup: SVGGElement;
