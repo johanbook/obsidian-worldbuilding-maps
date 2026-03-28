@@ -3,6 +3,7 @@ import { BasesView, QueryController } from "obsidian";
 import { renderMarker } from "./marker";
 import { parseCoordinates } from "utils";
 import { renderPolygon } from "polygon";
+import { setUpSvgZoom } from "zoom";
 
 export const VIEW_TYPE = "worldbuilding-map-view";
 
@@ -48,6 +49,12 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				width: String(width),
 				height: String(height),
 			},
+		});
+
+		setUpSvgZoom({
+			svg: svgEl,
+			originalHeight: height,
+			originalWidth: width,
 		});
 
 		return svgEl;
