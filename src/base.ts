@@ -1,9 +1,9 @@
 import { BasesView, QueryController } from "obsidian";
 
 import { renderMarker } from "./marker";
-import { parseCoordinates } from "utils";
-import { renderPolygon } from "polygon";
-import { setUpSvgZoom } from "zoom";
+import { parseCoordinates } from "./utils";
+import { renderPolygon } from "./polygon";
+import { setUpSvgZoomAndPan } from "./zoom-and-pan";
 
 export const VIEW_TYPE = "worldbuilding-map-view";
 
@@ -41,7 +41,9 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		});
 		svgEl.setCssStyles({ width: "100%", height: "100%" });
 
-		svgEl.createSvg("image", {
+		const contentGroup = svgEl.createSvg("g");
+
+		contentGroup.createSvg("image", {
 			attr: {
 				href: imageUrl,
 				x: "0",
@@ -51,13 +53,14 @@ export class WorldBuildingMapsBasesView extends BasesView {
 			},
 		});
 
-		setUpSvgZoom({
-			svg: svgEl,
+		setUpSvgZoomAndPan({
+			contentGroup,
+			svgElement: svgEl,
 			originalHeight: height,
 			originalWidth: width,
 		});
 
-		return svgEl;
+		return contentGroup;
 	}
 
 	public onDataUpdated(): void {
