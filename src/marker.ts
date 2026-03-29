@@ -1,4 +1,4 @@
-import { App, BasesEntry, setIcon } from "obsidian";
+import { App, BasesEntry, Notice, setIcon } from "obsidian";
 
 import { getProperty } from "./utils";
 
@@ -36,9 +36,10 @@ export function renderMarker(
 
 	marker.addEventListener("click", (event) => {
 		event.stopPropagation();
-		app.workspace
-			.openLinkText(item.file.path, "", false)
-			.catch((error) => console.error("Failed to open link", error));
+		app.workspace.openLinkText(item.file.path, "", false).catch((error) => {
+			new Notice("Failed to open link");
+			console.error("Failed to open link", error);
+		});
 	});
 
 	marker.addEventListener("mouseleave", (event) => {
