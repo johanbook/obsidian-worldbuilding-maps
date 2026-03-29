@@ -1,5 +1,6 @@
 import { App, BasesEntry, Notice, setIcon } from "obsidian";
 
+import { VIEW_TYPE } from "./constants";
 import { getProperty } from "./utils";
 
 function getIconName(type: string): string {
@@ -53,9 +54,20 @@ export function renderMarker(
 	marker.addEventListener("mouseenter", (event) => {
 		const svg = marker.querySelector("svg");
 
-		if (svg) {
-			svg.setAttr("stroke", "white");
+		if (!svg) {
+			return;
 		}
+
+		svg.setAttr("stroke", "white");
+
+		app.workspace.trigger("hover-link", {
+			event,
+			source: VIEW_TYPE,
+			hoverParent: marker,
+			targetEl: marker,
+			linktext: item.file.path,
+			sourcePath: item.file.path,
+		});
 	});
 
 	const iconName = getIconName(type);

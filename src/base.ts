@@ -4,8 +4,7 @@ import { renderMarker } from "./marker";
 import { parseCoordinates } from "./utils";
 import { renderPolygon } from "./polygon";
 import { setUpSvgZoomAndPan } from "./zoom-and-pan";
-
-export const VIEW_TYPE = "worldbuilding-map-view";
+import { VIEW_TYPE } from "./constants";
 
 export class WorldBuildingMapsBasesView extends BasesView {
 	readonly type = VIEW_TYPE;

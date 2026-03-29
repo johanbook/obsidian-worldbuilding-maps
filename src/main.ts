@@ -1,6 +1,7 @@
 import { Plugin } from "obsidian";
 
-import { WorldBuildingMapsBasesView, VIEW_TYPE } from "./base";
+import { WorldBuildingMapsBasesView } from "./base";
+import { VIEW_TYPE } from "./constants";
 
 export default class WorldBuildingMapsPlugin extends Plugin {
 	async onload() {
@@ -17,6 +18,11 @@ export default class WorldBuildingMapsPlugin extends Plugin {
 					default: "",
 				},
 			],
+		});
+
+		this.registerHoverLinkSource(VIEW_TYPE, {
+			display: "World Building Maps",
+			defaultMod: true,
 		});
 	}
 }
