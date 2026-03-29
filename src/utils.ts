@@ -23,7 +23,7 @@ export function parseCoordinates(
 
 	if (coords.length() % 2 !== 0) {
 		console.error(
-			`Number of coordinates must be even, got '${coords.length()}'`,
+			`Failed to parse coordinates in '${item.file.name}'. Number of coordinates must be an even number, but got ${coords.length()}.`,
 		);
 		return;
 	}
