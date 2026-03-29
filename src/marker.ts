@@ -1,4 +1,4 @@
-import { BasesEntry, setIcon } from "obsidian";
+import { App, BasesEntry, Notice, setIcon } from "obsidian";
 
 import { getProperty } from "./utils";
 
@@ -22,6 +22,7 @@ export function renderMarker(
 	y: number,
 	svgEl: SVGElement,
 	item: BasesEntry,
+	app: App,
 ): void {
 	const type = getProperty(item, "type");
 	const color = getProperty(item, "color");
@@ -31,6 +32,14 @@ export function renderMarker(
 			transform: `translate(${x} ${y})`,
 		},
 		cls: "wb-marker",
+	});
+
+	marker.addEventListener("click", (event) => {
+		event.stopPropagation();
+		app.workspace.openLinkText(item.file.path, "", false).catch((error) => {
+			new Notice("Failed to open link");
+			console.error("Failed to open link", error);
+		});
 	});
 
 	marker.addEventListener("mouseleave", (event) => {
