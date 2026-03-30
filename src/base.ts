@@ -1,10 +1,8 @@
-import { BasesView, QueryController } from "obsidian";
+import { BasesView, Notice, QueryController } from "obsidian";
 
-import { renderMarker, renderPolygon } from "./shapes";
-import { parseCoordinates } from "./utils";
-import { setUpSvgZoomAndPan } from "./zoom-and-pan";
-
-export const VIEW_TYPE = "worldbuilding-map-view";
+import { renderImage, renderMarker, renderPolygon } from "./shapes";
+import { parseCoordinates, setUpSvgZoomAndPan } from "./utils";
+import { VIEW_TYPE } from "./constants";
 
 export class WorldBuildingMapsBasesView extends BasesView {
 	readonly type = VIEW_TYPE;
@@ -27,11 +25,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		return this.app.vault.getResourcePath(file);
 	}
 
-	private createSvgFromImage(
-		imageUrl: string,
-		width: number,
-		height: number,
-	) {
+	private createSvgContainer(width: number, height: number) {
 		const svgEl = this.containerEl.createSvg("svg", {
 			attr: {
 				viewBox: `0 0 ${width} ${height}`,
@@ -40,26 +34,29 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		});
 		svgEl.setCssStyles({ width: "100%", height: "100%" });
 
-		const contentGroup = svgEl.createSvg("g");
+		const container = svgEl.createSvg("g");
 
-		contentGroup.createSvg("image", {
-			attr: {
-				href: imageUrl,
-				x: "0",
-				y: "0",
-				width: String(width),
-				height: String(height),
-			},
+		container.addEventListener("click", (event) => {
+			console.debug(
+				"Clicked",
+				event.layerX / svgEl.clientWidth,
+				event.layerY / svgEl.clientHeight,
+				{
+					width,
+					height,
+					event,
+				},
+			);
 		});
 
 		setUpSvgZoomAndPan({
-			contentGroup,
+			contentGroup: container,
 			svgElement: svgEl,
 			originalHeight: height,
 			originalWidth: width,
 		});
 
-		return contentGroup;
+		return container;
 	}
 
 	public onDataUpdated(): void {
@@ -77,31 +74,44 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		// Get image dimensions and render map
 		const image = new Image();
 		image.onload = () =>
-			this.renderMap(imageUrl, image.naturalWidth, image.naturalHeight);
-		image.onerror = (error) =>
+			this.render(imageUrl, image.naturalWidth, image.naturalHeight);
+		image.onerror = (error) => {
+			new Notice("Failed to resolve map dimensions");
 			console.error("Failed to resolve map dimensions", error);
+		};
 
 		image.src = imageUrl;
 	}
 
-	private renderMap(imageUrl: string, width: number, height: number) {
-		const svgEl = this.createSvgFromImage(imageUrl, width, height);
+	private render(imageUrl: string, width: number, height: number) {
+		const svgEl = this.createSvgContainer(width, height);
 
+		// Render background image
+		renderImage({
+			svgEl,
+			imageUrl,
+			width,
+			height,
+		});
+
+		// Render shapes from items in base
 		for (const item of this.data.data) {
-			const coords = parseCoordinates(item, width, height);
+			const coordinates = parseCoordinates(item, width, height);
 
-			if (!coords) {
+			if (!coordinates) {
 				continue;
 			}
 
 			// If more than one coordinate is specified we treat it as
-			// a ploygin
-			if (coords.length > 1) {
-				renderPolygon(coords, svgEl, item);
+			// a polygon
+			if (coordinates.length > 1) {
+				renderPolygon({ coordinates, svgEl, item });
 				// If just one coordinate then treat it as a marker
-			} else if (coords.length === 1) {
-				const { x, y } = coords[0]!;
-				renderMarker({ x, y, svgEl, item, app: this.app });
+			} else if (coordinates.length === 1) {
+				const [coordinate] = coordinates;
+				if (coordinate) {
+					renderMarker({ coordinate, svgEl, item, app: this.app });
+				}
 			}
 		}
 	}

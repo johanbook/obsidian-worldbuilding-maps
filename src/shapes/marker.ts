@@ -1,21 +1,21 @@
 import { App, BasesEntry, IconName, Notice, setIcon } from "obsidian";
 
+import { VIEW_TYPE } from "../constants";
+import type { Coordinate } from "../types";
 import { getProperty } from "../utils";
 
-const DEFAULT_COLOR = "white";
+const DEFAULT_COLOR = "rgba(200,200,200,0.85)";
 const DEFAULT_ICON = "lucide-map-pin";
 
 interface RenderMarkerProps {
-	x: number;
-	y: number;
+	coordinate: Coordinate;
 	svgEl: SVGElement;
 	item: BasesEntry;
 	app: App;
 }
 
 export function renderMarker({
-	x,
-	y,
+	coordinate,
 	svgEl,
 	item,
 	app,
@@ -25,7 +25,7 @@ export function renderMarker({
 
 	const marker = svgEl.createSvg("g", {
 		attr: {
-			transform: `translate(${x} ${y})`,
+			transform: `translate(${coordinate.x} ${coordinate.y})`,
 		},
 		cls: "wb-marker",
 	});
@@ -49,9 +49,20 @@ export function renderMarker({
 	marker.addEventListener("mouseenter", (event) => {
 		const svg = marker.querySelector("svg");
 
-		if (svg) {
-			svg.setAttr("stroke", "white");
+		if (!svg) {
+			return;
 		}
+
+		svg.setAttr("stroke", "white");
+
+		app.workspace.trigger("hover-link", {
+			event,
+			source: VIEW_TYPE,
+			hoverParent: marker,
+			targetEl: marker,
+			linktext: item.file.path,
+			sourcePath: item.file.path,
+		});
 	});
 
 	setIcon(marker as unknown as HTMLElement, icon);
