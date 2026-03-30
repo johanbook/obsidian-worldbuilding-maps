@@ -1,21 +1,21 @@
 import { App, BasesEntry, IconName, Notice, setIcon } from "obsidian";
 
 import { VIEW_TYPE } from "../constants";
-import type { Coordinate } from "../types";
+import type { Coordinates } from "../types";
 import { getProperty } from "../utils";
 
 const DEFAULT_COLOR = "rgba(200,200,200,0.85)";
 const DEFAULT_ICON = "lucide-map-pin";
 
 interface RenderMarkerProps {
-	coordinate: Coordinate;
+	coordinates: Coordinates;
 	svgEl: SVGElement;
 	item: BasesEntry;
 	app: App;
 }
 
 export function renderMarker({
-	coordinate,
+	coordinates,
 	svgEl,
 	item,
 	app,
@@ -25,7 +25,7 @@ export function renderMarker({
 
 	const marker = svgEl.createSvg("g", {
 		attr: {
-			transform: `translate(${coordinate.x} ${coordinate.y})`,
+			transform: `translate(${coordinates.x} ${coordinates.y})`,
 		},
 		cls: "wb-marker",
 	});

@@ -23,6 +23,7 @@ The recognized properties are the following:
   second the y-coordinate. The coordinates are relative to the image dimensions.
 - `icon`: [Lucide](https://lucide.dev/) icon to be used in the marker. Default
   is `lucide-map-pin`.
+- `region`: An SVG path using the `d` argument. 
 
 ## Example
 
