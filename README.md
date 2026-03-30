@@ -1,6 +1,6 @@
 # Obsidian Worldbuilding Maps
 
-> [!WARNING] 
+> [!WARNING]
 > This plugin is a work in progress and usability might vary.
 
 **Obsidian Worldbuilding Maps** is an [Obsidian](https://obsidian.md/) plugin
@@ -15,6 +15,20 @@ The recognized properties are the following:
 - `color`: Color of marker or polygon. Should be HEX format.
 - `coordinates`: A `multitext` property that contains first the x-coordinate and
   second the y-coordinate. The coordinates are relative to the image dimensions.
+
+## Example
+
+Below is an example base:
+
+```yaml
+views:
+    - type: worldbuilding-map-view
+      name: Map
+      filters:
+          and:
+              - "!coordinates.isEmpty()"
+      imageUrl: Map/World.jpg
+```
 
 ## Development
 
