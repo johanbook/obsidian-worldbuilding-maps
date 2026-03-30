@@ -14,7 +14,7 @@ const VIEW_OPTIONS: ViewOption[] = [
 export default class WorldBuildingMapsPlugin extends Plugin {
 	async onload() {
 		this.registerBasesView(VIEW_TYPE, {
-			name: "Map",
+			name: "Worldbuilding Map",
 			icon: "lucide-map",
 			factory: (controller, containerEl) =>
 				new WorldBuildingMapsBasesView(controller, containerEl),
