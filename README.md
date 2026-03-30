@@ -5,7 +5,7 @@
 
 **Obsidian Worldbuilding Maps** is an [Obsidian](https://obsidian.md/) plugin
 that adds a bases view that plots coordinates from your vault notes on an
-image-based map. It is intended for TRPG and worldbuilding.
+image-based map. It is intended for TTRPG and worldbuilding.
 
 ## Installation
 
