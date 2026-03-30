@@ -1,8 +1,7 @@
 import { BasesView, QueryController } from "obsidian";
 
-import { renderMarker } from "./marker";
+import { renderMarker, renderPolygon } from "./shapes";
 import { parseCoordinates } from "./utils";
-import { renderPolygon } from "./polygon";
 import { setUpSvgZoomAndPan } from "./zoom-and-pan";
 
 export const VIEW_TYPE = "worldbuilding-map-view";
