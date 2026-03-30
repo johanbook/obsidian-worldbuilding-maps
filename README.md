@@ -1,8 +1,8 @@
-# obsidian-worldbuilding-maps
+# Obsidian Worldbuilding Maps
 
 > [!WARNING] This plugin is a work in progress and usability might vary.
 
-**obsidian-worldbuilding-maps** is an [Obsidian](https://obsidian.md/) plugin
+**Obsidian Worldbuilding Maps** is an [Obsidian](https://obsidian.md/) plugin
 that adds a bases view that plots coordinates from your vault notes on an
 image-based map.
 
@@ -22,4 +22,9 @@ Color and type of icon is inferred from the `type` and `country` props.
 
 ## Development
 
-Open a PR.
+To set up for development:
+
+1. Clone this repository.
+2. Run `npm install` to install dependencies.
+3. Run `npm run dev` to start compilation in watch mode. When you're ready to
+   submit your changes, please open a pull request.
