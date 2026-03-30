@@ -30,6 +30,7 @@ export function renderMarker({
 		cls: "wb-marker",
 	});
 
+	// Open note on click
 	marker.addEventListener("click", (event) => {
 		event.stopPropagation();
 		app.workspace.openLinkText(item.file.path, "", false).catch((error) => {
@@ -38,19 +39,21 @@ export function renderMarker({
 		});
 	});
 
-	marker.addEventListener("mouseleave", (event) => {
-		const svg = marker.querySelector("svg");
-
-		if (svg) {
-			svg.setAttr("stroke", "black");
-		}
-	});
-
+	// Show hover effect
 	marker.addEventListener("mouseenter", (event) => {
 		const svg = marker.querySelector("svg");
 
 		if (svg) {
 			svg.setAttr("stroke", "white");
+		}
+	});
+
+	// Remove hover effect
+	marker.addEventListener("mouseleave", (event) => {
+		const svg = marker.querySelector("svg");
+
+		if (svg) {
+			svg.setAttr("stroke", "black");
 		}
 	});
 
@@ -62,6 +65,6 @@ export function renderMarker({
 		return;
 	}
 
-	svg.setAttr("stroke", "black");
 	svg.setAttr("fill", color);
+	svg.setAttr("stroke", "black");
 }
