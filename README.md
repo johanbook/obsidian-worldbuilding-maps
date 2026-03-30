@@ -10,8 +10,8 @@ image-based map. It is intended for TTRPG and worldbuilding.
 ## Installation
 
 Add this as a community plugin (when it has become one). Create a new base and
-pick the type "Wordbuilding Map" and pick an image in the "Background Image"
-field.
+pick the type "Worldbuilding Map" and select an image in the "Background Image"
+field to be used as your map.
 
 ## Properties
 
