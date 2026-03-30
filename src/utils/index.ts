@@ -1,11 +1,8 @@
-export * from "./zoom-and-pan";
-
 import { BasesEntry, ListValue } from "obsidian";
 
-interface Coordinate {
-	x: number;
-	y: number;
-}
+import type { Coordinate } from "../types";
+
+export * from "./zoom-and-pan";
 
 /** Parses coordinates from an Obsidian entry */
 export function parseCoordinates(

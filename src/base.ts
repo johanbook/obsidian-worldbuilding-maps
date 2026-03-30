@@ -1,4 +1,4 @@
-import { BasesView, QueryController } from "obsidian";
+import { BasesView, Notice, QueryController } from "obsidian";
 
 import { renderMarker, renderPolygon } from "./shapes";
 import { parseCoordinates, setUpSvgZoomAndPan } from "./utils";
@@ -50,6 +50,19 @@ export class WorldBuildingMapsBasesView extends BasesView {
 			},
 		});
 
+		contentGroup.addEventListener("click", (event) => {
+			console.debug(
+				"Clicked",
+				event.layerX / svgEl.clientWidth,
+				event.layerY / svgEl.clientHeight,
+				{
+					width,
+					height,
+					event,
+				},
+			);
+		});
+
 		setUpSvgZoomAndPan({
 			contentGroup,
 			svgElement: svgEl,
@@ -76,8 +89,10 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const image = new Image();
 		image.onload = () =>
 			this.renderMap(imageUrl, image.naturalWidth, image.naturalHeight);
-		image.onerror = (error) =>
+		image.onerror = (error) => {
+			new Notice("Failed to resolve map dimensions");
 			console.error("Failed to resolve map dimensions", error);
+		};
 
 		image.src = imageUrl;
 	}
@@ -86,20 +101,22 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const svgEl = this.createSvgFromImage(imageUrl, width, height);
 
 		for (const item of this.data.data) {
-			const coords = parseCoordinates(item, width, height);
+			const coordinates = parseCoordinates(item, width, height);
 
-			if (!coords) {
+			if (!coordinates) {
 				continue;
 			}
 
 			// If more than one coordinate is specified we treat it as
 			// a polygon
-			if (coords.length > 1) {
-				renderPolygon(coords, svgEl, item);
+			if (coordinates.length > 1) {
+				renderPolygon({ coordinates, svgEl, item });
 				// If just one coordinate then treat it as a marker
-			} else if (coords.length === 1) {
-				const { x, y } = coords[0]!;
-				renderMarker({ x, y, svgEl, item, app: this.app });
+			} else if (coordinates.length === 1) {
+				const [coordinate] = coordinates;
+				if (coordinate) {
+					renderMarker({ coordinate, svgEl, item, app: this.app });
+				}
 			}
 		}
 	}
