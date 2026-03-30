@@ -3,12 +3,6 @@ import { App, BasesEntry, IconName, Notice, setIcon } from "obsidian";
 import { getProperty } from "../utils";
 
 const DEFAULT_COLOR = "white";
-
-// Possible other icons
-// City - lucide-castle
-// Country - lucide-shield
-// Fortress lucide-chess-rook
-// Forest - lucide-trees
 const DEFAULT_ICON = "lucide-map-pin";
 
 interface RenderMarkerProps {
