@@ -1,12 +1,12 @@
 import { App, BasesEntry, Notice, setIcon } from "obsidian";
 
-import { getProperty } from "./utils";
+import { getProperty } from "../utils";
 
 // Possible other icons
 // City - lucide-castle
 // Country - lucide-shield
 // Fortress lucide-chess-rook
-// Fortest - lucide-trees
+// Forest - lucide-trees
 function getIconName(type: string): string {
 	switch (type) {
 		case "Country":
