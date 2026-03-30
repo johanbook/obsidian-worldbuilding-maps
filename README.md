@@ -18,6 +18,15 @@ The recognized properties are the following:
 - `icon`: [Lucide](https://lucide.dev/) icon to be used in the marker. Default
   is `lucide-map-pin`.
 
+## Icons
+
+Here are my personally recommended icons:
+
+- lucide-castle: City
+- lucide-shield: Country / kingdom / region
+- lucide-chess-rook: Fortress
+- lucide-trees: Forest
+
 ## Example
 
 Below is an example base:
