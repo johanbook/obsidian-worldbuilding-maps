@@ -1,23 +1,25 @@
-import { Plugin } from "obsidian";
+import { Plugin, ViewOption } from "obsidian";
 
 import { WorldBuildingMapsBasesView } from "./base";
 import { VIEW_TYPE } from "./constants";
 
+const VIEW_OPTIONS: ViewOption[] = [
+	{
+		type: "file",
+		displayName: "Background Image",
+		key: "imageUrl",
+		default: "",
+	},
+];
+
 export default class WorldBuildingMapsPlugin extends Plugin {
 	async onload() {
 		this.registerBasesView(VIEW_TYPE, {
-			name: "Map",
+			name: "Worldbuilding Map",
 			icon: "lucide-map",
 			factory: (controller, containerEl) =>
 				new WorldBuildingMapsBasesView(controller, containerEl),
-			options: () => [
-				{
-					type: "text",
-					displayName: "Image URL",
-					key: "imageUrl",
-					default: "",
-				},
-			],
+			options: () => VIEW_OPTIONS,
 		});
 
 		this.registerHoverLinkSource(VIEW_TYPE, {
