@@ -1,6 +1,6 @@
 import { BasesView, Notice, QueryController } from "obsidian";
 
-import { renderMarker, renderPolygon } from "./shapes";
+import { renderImage, renderMarker, renderPolygon } from "./shapes";
 import { parseCoordinates, setUpSvgZoomAndPan } from "./utils";
 import { VIEW_TYPE } from "./constants";
 
@@ -25,11 +25,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		return this.app.vault.getResourcePath(file);
 	}
 
-	private createSvgFromImage(
-		imageUrl: string,
-		width: number,
-		height: number,
-	) {
+	private createSvgContainer(width: number, height: number) {
 		const svgEl = this.containerEl.createSvg("svg", {
 			attr: {
 				viewBox: `0 0 ${width} ${height}`,
@@ -38,19 +34,9 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		});
 		svgEl.setCssStyles({ width: "100%", height: "100%" });
 
-		const contentGroup = svgEl.createSvg("g");
+		const container = svgEl.createSvg("g");
 
-		contentGroup.createSvg("image", {
-			attr: {
-				href: imageUrl,
-				x: "0",
-				y: "0",
-				width: String(width),
-				height: String(height),
-			},
-		});
-
-		contentGroup.addEventListener("click", (event) => {
+		container.addEventListener("click", (event) => {
 			console.debug(
 				"Clicked",
 				event.layerX / svgEl.clientWidth,
@@ -64,13 +50,13 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		});
 
 		setUpSvgZoomAndPan({
-			contentGroup,
+			contentGroup: container,
 			svgElement: svgEl,
 			originalHeight: height,
 			originalWidth: width,
 		});
 
-		return contentGroup;
+		return container;
 	}
 
 	public onDataUpdated(): void {
@@ -88,7 +74,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		// Get image dimensions and render map
 		const image = new Image();
 		image.onload = () =>
-			this.renderMap(imageUrl, image.naturalWidth, image.naturalHeight);
+			this.render(imageUrl, image.naturalWidth, image.naturalHeight);
 		image.onerror = (error) => {
 			new Notice("Failed to resolve map dimensions");
 			console.error("Failed to resolve map dimensions", error);
@@ -97,9 +83,18 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		image.src = imageUrl;
 	}
 
-	private renderMap(imageUrl: string, width: number, height: number) {
-		const svgEl = this.createSvgFromImage(imageUrl, width, height);
+	private render(imageUrl: string, width: number, height: number) {
+		const svgEl = this.createSvgContainer(width, height);
 
+		// Render background image
+		renderImage({
+			svgEl,
+			imageUrl,
+			width,
+			height,
+		});
+
+		// Render shapes from items in base
 		for (const item of this.data.data) {
 			const coordinates = parseCoordinates(item, width, height);
 
