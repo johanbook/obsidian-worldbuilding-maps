@@ -1,6 +1,6 @@
 import { BasesEntry } from "obsidian";
 
-import { getProperty } from "./utils";
+import { getProperty } from "../utils";
 
 const FILL_OPACITY = 0.1;
 const FILL_OPACITY_HIGHLIGHTED = 0.3;

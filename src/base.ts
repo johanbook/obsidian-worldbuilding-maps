@@ -1,8 +1,7 @@
 import { BasesView, QueryController } from "obsidian";
 
-import { renderMarker } from "./marker";
+import { renderMarker, renderPolygon } from "./shapes";
 import { parseCoordinates } from "./utils";
-import { renderPolygon } from "./polygon";
 import { setUpSvgZoomAndPan } from "./zoom-and-pan";
 import { VIEW_TYPE } from "./constants";
 
@@ -101,7 +100,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				// If just one coordinate then treat it as a marker
 			} else if (coords.length === 1) {
 				const { x, y } = coords[0]!;
-				renderMarker(x, y, svgEl, item, this.app);
+				renderMarker({ x, y, svgEl, item, app: this.app });
 			}
 		}
 	}

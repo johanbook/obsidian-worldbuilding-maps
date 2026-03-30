@@ -1,20 +1,42 @@
-# obsidian-worldbuilding-maps
+# Obsidian Worldbuilding Maps
 
-NB: This is very much a Work in Progress
+> [!WARNING]
+> This plugin is a work in progress and usability might vary.
 
-A plugin similar to the official Obsidian Maps but that uses a static image in
-the vault instead.
+**Obsidian Worldbuilding Maps** is an [Obsidian](https://obsidian.md/) plugin
+that adds a bases view that plots coordinates from your vault notes on an
+image-based map.
 
-## Coordinates
+## Properties
 
-Coordinates are stored in the frontmatter of the files like below
+The drawn markers and shapes are based on either formulas or note properties.
+The recognized properties are the following:
+
+- `color`: Color of marker or polygon. Should be HEX format.
+- `coordinates`: A `multitext` property that contains first the x-coordinate and
+  second the y-coordinate. The coordinates are relative to the image dimensions.
+- `icon`: [Lucide](https://lucide.dev/) icon to be used in the marker. Default
+  is `lucide-map-pin`.
+
+## Example
+
+Below is an example base:
 
 ```yaml
-type: City
-coordinates:
-    - "0.8"
-    - "0.2"
-color: red
+views:
+    - type: worldbuilding-map-view
+      name: Map
+      filters:
+          and:
+              - "!coordinates.isEmpty()"
+      imageUrl: Map/World.jpg
 ```
 
-Color and type of icon is inferred from the `type` and `country` props.
+## Development
+
+To set up for development:
+
+1. Clone this repository.
+2. Run `npm install` to install dependencies.
+3. Run `npm run dev` to start compilation in watch mode. When you're ready to
+   submit your changes, please open a pull request.
