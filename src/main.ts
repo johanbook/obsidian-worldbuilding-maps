@@ -1,6 +1,15 @@
-import { Plugin } from "obsidian";
+import { Plugin, ViewOption } from "obsidian";
 
 import { WorldBuildingMapsBasesView, VIEW_TYPE } from "./base";
+
+const VIEW_OPTIONS: ViewOption[] = [
+	{
+		type: "file",
+		displayName: "Background Image",
+		key: "imageUrl",
+		default: "",
+	},
+];
 
 export default class WorldBuildingMapsPlugin extends Plugin {
 	async onload() {
@@ -9,14 +18,7 @@ export default class WorldBuildingMapsPlugin extends Plugin {
 			icon: "lucide-map",
 			factory: (controller, containerEl) =>
 				new WorldBuildingMapsBasesView(controller, containerEl),
-			options: () => [
-				{
-					type: "text",
-					displayName: "Image URL",
-					key: "imageUrl",
-					default: "",
-				},
-			],
+			options: () => VIEW_OPTIONS,
 		});
 	}
 }
