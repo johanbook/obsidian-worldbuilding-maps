@@ -10,15 +10,9 @@ image-based map.
 
 Coordinates are stored in the frontmatter of the files like below
 
-```yaml
-type: City
-coordinates:
-    - "0.8"
-    - "0.2"
-color: red
-```
-
-Color and type of icon is inferred from the `type` and `country` props.
+- `color`: Color of marker or polygon.
+- `coordinates`: A `multitext` property that contains first the x-coordinate and
+  second the y-coordinate. The coordinates are relative to the image dimensions.
 
 ## Development
 
