@@ -3,7 +3,7 @@ import { App, BasesEntry, IconName, Notice, setIcon } from "obsidian";
 import { VIEW_TYPE } from "../constants";
 import { getProperty } from "../utils";
 
-const DEFAULT_COLOR = "white";
+const DEFAULT_COLOR = "rgba(200,200,200,0.85)";
 const DEFAULT_ICON = "lucide-map-pin";
 
 interface RenderMarkerProps {
