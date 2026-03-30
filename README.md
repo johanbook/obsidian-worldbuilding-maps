@@ -1,16 +1,18 @@
 # Obsidian Worldbuilding Maps
 
-> [!WARNING] This plugin is a work in progress and usability might vary.
+> [!WARNING] 
+> This plugin is a work in progress and usability might vary.
 
 **Obsidian Worldbuilding Maps** is an [Obsidian](https://obsidian.md/) plugin
 that adds a bases view that plots coordinates from your vault notes on an
 image-based map.
 
-## Coordinates
+## Properties
 
-Coordinates are stored in the frontmatter of the files like below
+The drawn markers and shapes are based on either formulas or note properties.
+The recognized properties are the following:
 
-- `color`: Color of marker or polygon.
+- `color`: Color of marker or polygon. Should be HEX format.
 - `coordinates`: A `multitext` property that contains first the x-coordinate and
   second the y-coordinate. The coordinates are relative to the image dimensions.
 
