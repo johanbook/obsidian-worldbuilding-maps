@@ -1,3 +1,5 @@
+export * from "./zoom-and-pan";
+
 import { BasesEntry, ListValue } from "obsidian";
 
 interface Coordinate {
