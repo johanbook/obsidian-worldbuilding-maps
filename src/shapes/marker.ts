@@ -1,31 +1,27 @@
-import { App, BasesEntry, Notice, setIcon } from "obsidian";
+import { App, BasesEntry, IconName, Notice, setIcon } from "obsidian";
 
 import { getProperty } from "../utils";
 
-// Possible other icons
-// City - lucide-castle
-// Country - lucide-shield
-// Fortress lucide-chess-rook
-// Forest - lucide-trees
-function getIconName(type: string): string {
-	switch (type) {
-		case "Country":
-			return "lucide-shield";
-		default:
-			return "lucide-map-pin";
-	}
+const DEFAULT_COLOR = "white";
+const DEFAULT_ICON = "lucide-map-pin";
+
+interface RenderMarkerProps {
+	x: number;
+	y: number;
+	svgEl: SVGElement;
+	item: BasesEntry;
+	app: App;
 }
 
-export function renderMarker(
-	x: number,
-	y: number,
-	svgEl: SVGElement,
-	item: BasesEntry,
-	app: App,
-): void {
-	const color = getProperty(item, "color");
-	const icon = getProperty(item, "icon");
-	const type = getProperty(item, "type");
+export function renderMarker({
+	x,
+	y,
+	svgEl,
+	item,
+	app,
+}: RenderMarkerProps): void {
+	const color = getProperty(item, "color") || DEFAULT_COLOR;
+	const icon: IconName = getProperty(item, "icon") || DEFAULT_ICON;
 
 	const marker = svgEl.createSvg("g", {
 		attr: {
@@ -58,10 +54,7 @@ export function renderMarker(
 		}
 	});
 
-	const iconName = icon ?? getIconName(type);
-
-	// @ts-expect-error // TODO: Fix type error
-	setIcon(marker, iconName);
+	setIcon(marker as unknown as HTMLElement, icon);
 
 	const svg = marker.querySelector("svg");
 
@@ -70,8 +63,5 @@ export function renderMarker(
 	}
 
 	svg.setAttr("stroke", "black");
-
-	if (color) {
-		svg.setAttr("fill", color);
-	}
+	svg.setAttr("fill", color);
 }
