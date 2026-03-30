@@ -16,13 +16,21 @@ function getIconName(type: string): string {
 	}
 }
 
-export function renderMarker(
-	x: number,
-	y: number,
-	svgEl: SVGElement,
-	item: BasesEntry,
-	app: App,
-): void {
+interface RenderMarkerProps {
+	x: number;
+	y: number;
+	svgEl: SVGElement;
+	item: BasesEntry;
+	app: App;
+}
+
+export function renderMarker({
+	x,
+	y,
+	svgEl,
+	item,
+	app,
+}: RenderMarkerProps): void {
 	const color = getProperty(item, "color");
 	const icon = getProperty(item, "icon");
 	const type = getProperty(item, "type");
@@ -58,7 +66,7 @@ export function renderMarker(
 		}
 	});
 
-	const iconName = icon ?? getIconName(type);
+	const iconName = icon || getIconName(type);
 
 	// @ts-expect-error // TODO: Fix type error
 	setIcon(marker, iconName);
