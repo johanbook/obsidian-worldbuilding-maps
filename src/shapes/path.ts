@@ -14,18 +14,18 @@ interface RenderPathProps {
 	item: BasesEntry;
 }
 
-/** Renders a SVG polygon */
+/** Renders a SVG path */
 export function renderPath({ app, path, svgEl, item }: RenderPathProps): void {
 	const color = getProperty(item, "color") || DEFAULT_COLOR;
 
-	const marker = svgEl.createSvg("path", {
+	const pathEl = svgEl.createSvg("path", {
 		attr: {
 			d: path,
 		},
 		cls: "wb-marker",
 	});
 
-	marker.addEventListener("click", (event) => {
+	pathEl.addEventListener("click", (event) => {
 		event.stopPropagation();
 		app.workspace.openLinkText(item.file.path, "", false).catch((error) => {
 			new Notice("Failed to open link");
@@ -34,24 +34,24 @@ export function renderPath({ app, path, svgEl, item }: RenderPathProps): void {
 	});
 
 	// Add hover effect
-	marker.addEventListener("mouseenter", (event) => {
-		marker.setAttr("fill-opacity", FILL_OPACITY_HIGHLIGHTED);
+	pathEl.addEventListener("mouseenter", (event) => {
+		pathEl.setAttr("fill-opacity", FILL_OPACITY_HIGHLIGHTED);
 
 		app.workspace.trigger("hover-link", {
 			event,
 			source: VIEW_TYPE,
-			hoverParent: marker,
-			targetEl: marker,
+			hoverParent: pathEl,
+			targetEl: pathEl,
 			linktext: item.file.path,
 			sourcePath: item.file.path,
 		});
 	});
 
 	// Remove hover effect
-	marker.addEventListener("mouseleave", (event) => {
-		marker.setAttr("fill-opacity", FILL_OPACITY);
+	pathEl.addEventListener("mouseleave", (event) => {
+		pathEl.setAttr("fill-opacity", FILL_OPACITY);
 	});
 
-	marker.setAttr("fill-opacity", FILL_OPACITY);
-	marker.setAttr("fill", color);
+	pathEl.setAttr("fill-opacity", FILL_OPACITY);
+	pathEl.setAttr("fill", color);
 }
