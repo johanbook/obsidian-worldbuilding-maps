@@ -29,10 +29,11 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		const svgEl = this.containerEl.createSvg("svg", {
 			attr: {
 				viewBox: `0 0 ${width} ${height}`,
-				preserveAspectRatio: "xMidYMid meet",
+				preserveAspectRatio: "xMidYMid slice",
+				width: "100%",
+				height: "100%",
 			},
 		});
-		svgEl.setCssStyles({ width: "100%", height: "100%" });
 
 		const container = svgEl.createSvg("g");
 
