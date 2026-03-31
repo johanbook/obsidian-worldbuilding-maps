@@ -1,7 +1,7 @@
 import { BasesView, Notice, QueryController } from "obsidian";
 
-import { renderImage, renderMarker, renderPolygon } from "./shapes";
-import { parseCoordinates, setUpSvgZoomAndPan } from "./utils";
+import { renderImage, renderMarker, renderPath } from "./shapes";
+import { getProperty, parseCoordinates, setUpSvgZoomAndPan } from "./utils";
 import { VIEW_TYPE } from "./constants";
 
 export class WorldBuildingMapsBasesView extends BasesView {
@@ -96,22 +96,15 @@ export class WorldBuildingMapsBasesView extends BasesView {
 
 		// Render shapes from items in base
 		for (const item of this.data.data) {
-			const coordinates = parseCoordinates(item, width, height);
-
-			if (!coordinates) {
+			const region = getProperty(item, "region");
+			if (region) {
+				renderPath({ app: this.app, path: region, svgEl, item });
 				continue;
 			}
 
-			// If more than one coordinate is specified we treat it as
-			// a polygon
-			if (coordinates.length > 1) {
-				renderPolygon({ coordinates, svgEl, item });
-				// If just one coordinate then treat it as a marker
-			} else if (coordinates.length === 1) {
-				const [coordinate] = coordinates;
-				if (coordinate) {
-					renderMarker({ coordinate, svgEl, item, app: this.app });
-				}
+			const coordinates = parseCoordinates(item, width, height);
+			if (coordinates) {
+				renderMarker({ coordinates, svgEl, item, app: this.app });
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 import { BasesEntry, ListValue } from "obsidian";
 
-import type { Coordinate } from "../types";
+import type { Coordinates } from "../types";
 
 export * from "./zoom-and-pan";
 
@@ -9,7 +9,7 @@ export function parseCoordinates(
 	item: BasesEntry,
 	width: number,
 	height: number,
-): Coordinate[] | undefined {
+): Coordinates | undefined {
 	const coords = item.getValue("note.coordinates");
 
 	if (!coords) {
@@ -20,25 +20,18 @@ export function parseCoordinates(
 		return;
 	}
 
-	if (coords.length() % 2 !== 0) {
+	if (coords.length() !== 2) {
 		console.error(
-			`Number of coordinates must be even, got '${coords.length()}'`,
+			`Number of coordinates must be 2, got '${coords.length()}'`,
 		);
 		return;
 	}
 
 	try {
-		const result: Coordinate[] = [];
+		const x = Number(coords.get(0)) * width;
+		const y = Number(coords.get(1)) * height;
 
-		// Parse coordinates in x and y pairs
-		for (let index = 0; index < coords.length(); index += 2) {
-			const x = Number(coords.get(index)) * width;
-			const y = Number(coords.get(index + 1)) * height;
-
-			result.push({ x, y });
-		}
-
-		return result;
+		return { x, y };
 	} catch (error) {
 		console.error("Failed to parse coordinates", error);
 	}
