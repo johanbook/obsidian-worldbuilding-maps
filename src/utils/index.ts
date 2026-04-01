@@ -18,18 +18,21 @@ export function parseCoordinates(item: BasesEntry): Coordinates | undefined {
 
 	if (coords.length() !== 2) {
 		console.error(
-			`Number of coordinates must be 2, got '${coords.length()}'`,
+			`Number of coordinates must be 2, got ${coords.length()} in '${item.file.path}'`,
 		);
 		return;
 	}
 
 	try {
-		const x = Number(coords.get(0));
-		const y = Number(coords.get(1));
-
-		return { x, y };
+		return {
+			x: Number(coords.get(0)),
+			y: Number(coords.get(1)),
+		};
 	} catch (error) {
-		console.error("Failed to parse coordinates", error);
+		console.error(
+			`Failed to parse coordinates in note '${item.file.path}'`,
+			error,
+		);
 	}
 	return;
 }
