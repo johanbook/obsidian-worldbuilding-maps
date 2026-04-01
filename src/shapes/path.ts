@@ -1,21 +1,28 @@
 import { App, BasesEntry, Notice } from "obsidian";
 
+import { Config } from "../config";
 import { VIEW_TYPE } from "../constants";
 import { getProperty } from "../utils";
 
 const DEFAULT_COLOR = "rgba(200,200,200,0.85)";
-const FILL_OPACITY = 0.1;
-const FILL_OPACITY_HIGHLIGHTED = 0.3;
+const FILL_OPACITY_HIGHLIGHTED = 0.2;
 
 interface RenderPathProps {
 	app: App;
+	config: Config;
 	path: string;
 	svgEl: SVGElement;
 	item: BasesEntry;
 }
 
 /** Renders a SVG path */
-export function renderPath({ app, path, svgEl, item }: RenderPathProps): void {
+export function renderPath({
+	app,
+	config,
+	path,
+	svgEl,
+	item,
+}: RenderPathProps): void {
 	const color = getProperty(item, "color") || DEFAULT_COLOR;
 
 	const pathEl = svgEl.createSvg("path", {
@@ -35,7 +42,10 @@ export function renderPath({ app, path, svgEl, item }: RenderPathProps): void {
 
 	// Add hover effect
 	pathEl.addEventListener("mouseenter", (event) => {
-		pathEl.setAttr("fill-opacity", FILL_OPACITY_HIGHLIGHTED);
+		pathEl.setAttr(
+			"fill-opacity",
+			config.regions.fillOpacity + FILL_OPACITY_HIGHLIGHTED,
+		);
 
 		app.workspace.trigger("hover-link", {
 			event,
@@ -49,9 +59,13 @@ export function renderPath({ app, path, svgEl, item }: RenderPathProps): void {
 
 	// Remove hover effect
 	pathEl.addEventListener("mouseleave", (event) => {
-		pathEl.setAttr("fill-opacity", FILL_OPACITY);
+		pathEl.setAttr("fill-opacity", config.regions.fillOpacity);
 	});
 
-	pathEl.setAttr("fill-opacity", FILL_OPACITY);
+	pathEl.setAttr("fill-opacity", config.regions.fillOpacity);
 	pathEl.setAttr("fill", color);
+
+	if (config.regions.showBorders) {
+		pathEl.setAttr("stroke", color);
+	}
 }
