@@ -13,6 +13,9 @@ export function parseCoordinates(item: BasesEntry): Coordinates | undefined {
 	}
 
 	if (!(coords instanceof ListValue)) {
+		console.error(
+			`Note '${item.file.path}' has coordinates but they are not formatted as a list. Fix the type to make them render in the map view.`,
+		);
 		return;
 	}
 
@@ -24,10 +27,16 @@ export function parseCoordinates(item: BasesEntry): Coordinates | undefined {
 	}
 
 	try {
-		return {
-			x: Number(coords.get(0)),
-			y: Number(coords.get(1)),
-		};
+		const x = Number(coords.get(0));
+		const y = Number(coords.get(1));
+
+		if (Number.isNaN(x) || Number.isNaN(y)) {
+			throw new Error(
+				`Invalid numeric values: ${String(coords.get(0))}, ${String(coords.get(1))}`,
+			);
+		}
+
+		return { x, y };
 	} catch (error) {
 		console.error(
 			`Failed to parse coordinates in note '${item.file.path}'`,
