@@ -20,10 +20,10 @@ The recognized properties are the following:
 
 - `color`: Color of marker or polygon. Should be HEX format.
 - `coordinates`: A `multitext` property that contains first the x-coordinate and
-  second the y-coordinate. The coordinates are relative to the image dimensions.
+  second the y-coordinate. The coordinates are absolute .
 - `icon`: [Lucide](https://lucide.dev/) icon to be used in the marker. Default
   is `lucide-map-pin`.
-- `region`: An SVG path using the `d` argument. 
+- `region`: An SVG path using the `d` argument.
 
 ## Example
 

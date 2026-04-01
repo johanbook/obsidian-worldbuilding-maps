@@ -5,11 +5,7 @@ import type { Coordinates } from "../types";
 export * from "./zoom-and-pan";
 
 /** Parses coordinates from an Obsidian entry */
-export function parseCoordinates(
-	item: BasesEntry,
-	width: number,
-	height: number,
-): Coordinates | undefined {
+export function parseCoordinates(item: BasesEntry): Coordinates | undefined {
 	const coords = item.getValue("note.coordinates");
 
 	if (!coords) {
@@ -28,8 +24,8 @@ export function parseCoordinates(
 	}
 
 	try {
-		const x = Number(coords.get(0)) * width;
-		const y = Number(coords.get(1)) * height;
+		const x = Number(coords.get(0));
+		const y = Number(coords.get(1));
 
 		return { x, y };
 	} catch (error) {

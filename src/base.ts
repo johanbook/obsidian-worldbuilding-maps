@@ -102,7 +102,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				continue;
 			}
 
-			const coordinates = parseCoordinates(item, width, height);
+			const coordinates = parseCoordinates(item);
 			if (coordinates) {
 				renderMarker({ coordinates, svgEl, item, app: this.app });
 			}
