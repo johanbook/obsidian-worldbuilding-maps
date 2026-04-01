@@ -36,19 +36,6 @@ export class WorldBuildingMapsBasesView extends BasesView {
 
 		const container = svgEl.createSvg("g");
 
-		container.addEventListener("click", (event) => {
-			console.debug(
-				"Clicked",
-				event.layerX / svgEl.clientWidth,
-				event.layerY / svgEl.clientHeight,
-				{
-					width,
-					height,
-					event,
-				},
-			);
-		});
-
 		setUpSvgZoomAndPan({
 			contentGroup: container,
 			svgElement: svgEl,
@@ -102,7 +89,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 				continue;
 			}
 
-			const coordinates = parseCoordinates(item, width, height);
+			const coordinates = parseCoordinates(item);
 			if (coordinates) {
 				renderMarker({ coordinates, svgEl, item, app: this.app });
 			}
