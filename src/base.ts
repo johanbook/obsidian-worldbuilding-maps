@@ -11,6 +11,7 @@ export class WorldBuildingMapsBasesView extends BasesView {
 	constructor(controller: QueryController, parentEl: HTMLElement) {
 		super(controller);
 		this.containerEl = parentEl.createDiv(`${VIEW_TYPE}-container`);
+		this.containerEl.setCssStyles({ width: "100%", height: "100%" });
 	}
 
 	private getImageUrl() {
