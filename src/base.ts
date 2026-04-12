@@ -1,5 +1,6 @@
 import { BasesView, Notice, QueryController } from "obsidian";
 
+import { Config, parseConfig } from "./config";
 import { renderImage, renderMarker, renderPath } from "./shapes";
 import { getProperty, parseCoordinates, setUpSvgZoomAndPan } from "./utils";
 import { VIEW_TYPE } from "./constants";
@@ -7,9 +8,13 @@ import { VIEW_TYPE } from "./constants";
 export class WorldBuildingMapsBasesView extends BasesView {
 	readonly type = VIEW_TYPE;
 	private containerEl: HTMLElement;
+	private pasedConfig: Config;
 
 	constructor(controller: QueryController, parentEl: HTMLElement) {
 		super(controller);
+
+		this.pasedConfig = parseConfig(this.config);
+
 		this.containerEl = parentEl.createDiv(`${VIEW_TYPE}-container`);
 		this.containerEl.setCssStyles({ width: "100%", height: "100%" });
 	}
@@ -37,17 +42,21 @@ export class WorldBuildingMapsBasesView extends BasesView {
 
 		const container = svgEl.createSvg("g");
 
-		setUpSvgZoomAndPan({
-			contentGroup: container,
-			svgElement: svgEl,
-			originalHeight: height,
-			originalWidth: width,
-		});
+		if (this.pasedConfig.enableZoomAndPan) {
+			setUpSvgZoomAndPan({
+				contentGroup: container,
+				svgElement: svgEl,
+				originalHeight: height,
+				originalWidth: width,
+			});
+		}
 
 		return container;
 	}
 
 	public onDataUpdated(): void {
+		this.pasedConfig = parseConfig(this.config);
+
 		this.containerEl.empty();
 
 		const imageUrl = this.getImageUrl();
@@ -86,7 +95,13 @@ export class WorldBuildingMapsBasesView extends BasesView {
 		for (const item of this.data.data) {
 			const region = getProperty(item, "region");
 			if (region) {
-				renderPath({ app: this.app, path: region, svgEl, item });
+				renderPath({
+					app: this.app,
+					config: this.pasedConfig,
+					path: region,
+					svgEl,
+					item,
+				});
 				continue;
 			}
 

@@ -1,16 +1,8 @@
-import { Plugin, ViewOption } from "obsidian";
+import { Plugin } from "obsidian";
 
 import { WorldBuildingMapsBasesView } from "./base";
+import { VIEW_OPTIONS } from "./config";
 import { VIEW_TYPE } from "./constants";
-
-const VIEW_OPTIONS: ViewOption[] = [
-	{
-		type: "file",
-		displayName: "Background Image",
-		key: "imageUrl",
-		default: "",
-	},
-];
 
 export default class WorldBuildingMapsPlugin extends Plugin {
 	async onload() {
