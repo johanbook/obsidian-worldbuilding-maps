@@ -25,5 +25,8 @@ jobs:
             - name: Run typecheck
               run: npm run typecheck
 
+            - name: Run tests
+              run: npm run test
+
             - name: Check that build passes
               run: npm run build --if-present
